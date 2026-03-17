@@ -1,16 +1,22 @@
 import { useState } from "react";
 
-export type ConsentState = "accepted" | "rejected" | null;
+export type ConsentPreferences = {
+  necessary: true;
+  analytics: boolean;
+  marketing: boolean;
+};
 
 export function useConsent() {
-  const [consent, setConsent] = useState<ConsentState>(() => {
+  const [consent, setConsent] = useState<ConsentPreferences | null>(() => {
     if (typeof window === "undefined") return null;
-    return localStorage.getItem("consent") as ConsentState;
+
+    const stored = localStorage.getItem("consent");
+    return stored ? JSON.parse(stored) : null;
   });
 
-  const saveConsent = (value: ConsentState) => {
+  const saveConsent = (value: ConsentPreferences) => {
     if (value) {
-      localStorage.setItem("consent", value);
+      localStorage.setItem("consent", JSON.stringify(value));
       setConsent(value);
     }
   };
@@ -19,6 +25,5 @@ export function useConsent() {
     consent,
     saveConsent,
     hasConsent: !!consent,
-    isAccepted: consent === "accepted",
   };
 }
