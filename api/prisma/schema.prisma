@@ -1,0 +1,19 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model consent {
+  id         String   @id @default(uuid())
+  user_id    String?
+  session_id String?
+  
+  analytics  Boolean  @default(false)
+  marketing  Boolean  @default(false)
+  necessary  Boolean  @default(true)
+
+  created_at DateTime @default(now())
+}
