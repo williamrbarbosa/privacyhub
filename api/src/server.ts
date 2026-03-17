@@ -1,5 +1,6 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
+import path from "path";
 
 import { consentController } from "./modules/consent/consent.controller";
 
@@ -13,6 +14,11 @@ app.register(cors, {
 
 app.get("/health", async () => {
   return { status: "ok" };
+});
+
+app.register(require("@fastify/static"), {
+  root: path.join(__dirname, "../dist"),
+  prefix: "/",
 });
 
 app.register(consentController);

@@ -9,15 +9,18 @@ export function useScriptControl() {
   useEffect(() => {
     if (!consent) return;
 
-    // Analytics
+    // ANALYTICS
     if (consent.analytics) {
       loadAnalytics();
-      runBlockedScripts("analytics");
+    } else {
+      removeScript("analytics-script");
     }
 
-    // Marketing
+    // MARKETING
     if (consent.marketing) {
       loadMarketing();
+    } else {
+      removeScript("marketing-script");
     }
   }, [consent]);
 }
@@ -60,4 +63,11 @@ function runBlockedScripts(category: string) {
 
     document.body.appendChild(newScript);
   });
+}
+
+function removeScript(id: string) {
+  const script = document.getElementById(id);
+  if (script) {
+    script.remove();
+  }
 }
